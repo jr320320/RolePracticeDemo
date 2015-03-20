@@ -53,11 +53,14 @@ namespace RoleSample
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            // 使用Google OAuth ，在此區塊填入自己的 "網路應用程式的用戶端編號"
+            // 以下資訊可在"Google 開發人員中心"  https://console.developers.google.com/project 設定
+
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "17101229660-hn4caguir9okanbbp9e8ti5n86uuqvs6.apps.googleusercontent.com",
+                ClientSecret = "zWT5j8cEfZPdSJMgdUKPR0W7"
+            });
         }
     }
 }

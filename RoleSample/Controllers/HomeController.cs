@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace RoleSample.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         //private ApplicationDbContext db = new ApplicationDbContext();
@@ -45,38 +46,41 @@ namespace RoleSample.Controllers
 
             //依 Role判斷 SQL cmd
             SqlCommand cmd = new SqlCommand();
-            if (roles.Equals("Admin"))
-                cmd.CommandText = "select * from AspNetMenu ";
-            else
-                cmd.CommandText = "select * from AspNetMenu where RoleName= '" + roles + "'";
-
-            //成功登入後，顯示MENU內容
-            using (SqlConnection cn = new SqlConnection(connectionString))
+            if (!string.IsNullOrEmpty(roles))
             {
-                cmd.Connection = cn;
-                cn.Open();
-                using (SqlDataReader dr = cmd.ExecuteReader())
+                if (roles.Equals("Admin"))
+                    cmd.CommandText = "select * from AspNetMenu ";
+                else
+                    cmd.CommandText = "select * from AspNetMenu where RoleName= '" + roles + "'";
+
+                //成功登入後，顯示MENU內容
+                using (SqlConnection cn = new SqlConnection(connectionString))
                 {
-                    try
+                    cmd.Connection = cn;
+                    cn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        while (dr.Read())
+                        try
                         {
-                            MenuItemModel item = new MenuItemModel();
+                            while (dr.Read())
+                            {
+                                MenuItemModel item = new MenuItemModel();
 
-                            item.Id = Convert.ToInt32(dr["Id"].ToString());
-                            item.Parent = Convert.ToInt32(dr["Parent"].ToString());
-                            item.Order = Convert.ToInt32(dr["Order"].ToString());
-                            item.Name = dr["Name"].ToString();
-                            item.RoleName = dr["RoleName"].ToString();
-                            item.Controller = dr["Controller"].ToString();
-                            item.Action = dr["Action"].ToString();
+                                item.Id = Convert.ToInt32(dr["Id"].ToString());
+                                item.Parent = Convert.ToInt32(dr["Parent"].ToString());
+                                item.Order = Convert.ToInt32(dr["Order"].ToString());
+                                item.Name = dr["Name"].ToString();
+                                item.RoleName = dr["RoleName"].ToString();
+                                item.Controller = dr["Controller"].ToString();
+                                item.Action = dr["Action"].ToString();
 
-                            menuItem.Add(item);
+                                menuItem.Add(item);
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.ToString());
+                        catch (Exception ex)
+                        {
+                            throw new Exception(ex.ToString());
+                        }
                     }
                 }
             }

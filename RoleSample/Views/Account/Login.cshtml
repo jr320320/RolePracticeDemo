@@ -52,6 +52,8 @@
             }
         </section>
     </div>
+
+    @*若有提供外部驗證登入，以Partial 顯示*@
     <div class="col-md-4">
         <section id="socialLoginForm">
             @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { Action = "ExternalLogin", ReturnUrl = ViewBag.ReturnUrl })
